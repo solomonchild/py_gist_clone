@@ -1,21 +1,39 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
+from django.core.urlresolvers import reverse
+from django.views import generic
 from gist2.models import Gist
+from django.contrib.auth.models import User
 
 # Create your views here.
 
-def index(request):
-	latest_gists = Gist.objects.order_by('-pub_date')[:5]
-	context = {'latest_gists' : latest_gists, }
-	return render(request, 'gists/index.html', context)
+class IndexView(generic.ListView):
+  template_name = "gists/index.html" 
+  context_object_name = "latest_gists"
+
+  def get_queryset(self):
+    return Gist.objects.order_by('-pub_date')[:5]
 	
 
-def details_gist(request, gist_id):
-	return HttpResponse("You are looking at gist %s" % gist_id)
+class DetailGistView(generic.DetailView):
+  model = Gist
+  template_name = "gists/details.html"
 
-def details_user(requests, user_id):
-	return HttpResponse("You are looking at the profile %s" % user_id)
+def edit_gist(request, gist_id):
+  g = get_object_or_404(Gist, pk=gist_id)
+  text = request.POST['text']
+  g.text = text
+  g.save()
+  return HttpResponseRedirect(reverse('index'))
 
-def user_gists(request, user_id):
-	return HttpResponse("You are looking at gists of user %s" % user_id)
+class DetailUserView(generic.DetailView):
+  model = User
+  template_name = "users/details.html"
+
+class UserGists(generic.ListView):
+  template_name = "users/users_gists.html" 
+  context_object_name = "user_gists"
+
+  def get_queryset(self):
+    return Gist.objects.order_by('-pub_date')[:5]

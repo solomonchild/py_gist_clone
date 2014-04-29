@@ -1,0 +1,7 @@
+{% if user_gists %}
+  <ul>
+  {% for gist in user_gists %}
+    <li> {{ gist.text }} </li>
+  {% endfor %}
+  </ul>
+{% endif %}
