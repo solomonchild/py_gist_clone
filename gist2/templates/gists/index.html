@@ -1,3 +1,6 @@
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'gist2/style.css' %}"/>
+
 {% if latest_gists %}
 	<ul>
 	{% for gist in latest_gists %}
