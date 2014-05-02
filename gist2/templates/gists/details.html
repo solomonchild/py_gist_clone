@@ -1,6 +1,27 @@
-{% if error_message %}<p><strong>{{ error_message }} </strong></p>{% endif %}
-<form action="{% url 'edit_gist' gist.id %}" method="post">
-  {% csrf_token %}
-  <input type="textarea" name="text" value="{{ gist.text }}" />
-  <input type="submit" value="Save" />
-</form>
+{% extends "base.html" %}
+{% block title %} Details for gist {{ gist.id }} {% endblock %}
+{% block content %}
+  {% if error_message %}<p><strong>{{ error_message }} </strong></p>{% endif %}
+
+  <form class="form-signin gist-edit" action="{% url 'edit_gist' gist.id %}" method="post">
+    {% csrf_token %}
+    <input class="form-control" rows="20"  type="textarea" name="text" value="{{ gist.text }}" />
+    <br>
+    <input type="submit" value="Save" />
+  </form>
+  {% block userscript %}  
+
+  <script>
+    window.onload = function() {
+      var textarea = document.getElementsByName("text")[0];
+      var codeMirror = CodeMirror.fromTextArea(textarea, {
+	lineNumbers:true,
+	mode:"javascript",
+	smartIndent:true,
+      });
+      console.log(CodeMirror.modes)
+    }
+  </script>
+
+  {% endblock %}
+{% endblock %}

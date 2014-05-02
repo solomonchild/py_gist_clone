@@ -1,12 +1,13 @@
-{% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'gist2/style.css' %}"/>
-
-{% if latest_gists %}
-	<ul>
-	{% for gist in latest_gists %}
-	<li><a href="{% url 'detail_gist' gist.id %}">{{ gist.text }} </a> </li>
-	{% endfor %}
-	</ul>
-{% else %}
-<p> There are no gists available </p>
-{% endif %}
+{% extends "base.html" %}
+{% block title %} gist2.0 {% endblock %}
+{% block content %}
+  {% if latest_gists %}
+    <ul>
+    {% for gist in latest_gists %}
+    <li><a href="{% url 'detail_gist' gist.id %}">{{ gist.text }} </a> </li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p> There are no gists available </p>
+  {% endif %}
+{% endblock %}

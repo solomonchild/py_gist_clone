@@ -1,0 +1,30 @@
+{% load staticfiles %}
+<html>
+  <head>
+    <title> {% block title %} {% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'gist2/styles/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'gist2/styles/custom.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'gist2/styles/codemirror.css'%}"/> 
+  </head>
+
+  <body role="document">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+	<a class="navbar-brand" href="/">gist 2.0</a>
+      </div>
+    </div>
+    {% block content %} {% endblock %}
+    <div class="container">
+      <hr>
+      <footer class="footer pull-right">
+	<p> gist 2.0 2014 </p>
+      </footer>
+    </div>
+
+
+    <script src="{% static 'gist2/js/jquery-2.1.1.min.js' %}"></script>
+    <script src="{% static 'gist2/js/bootstrap.js' %}"></script>
+    <script src="{% static 'gist2/js/codemirror.js' %}"> </script>
+  {% block userscript %} {% endblock %}
+  </body>
+</html>

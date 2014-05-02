@@ -1,0 +1,14 @@
+body {
+  padding-top:70px;
+}
+form.gist-edit{
+  margin:0 auto;
+  max-width:600px;
+}
+form.gist-edit input[type="submit"] {
+  float:right;
+}
+input[type="textarea"] {
+  height:300px;
+  width:600px;
+}
