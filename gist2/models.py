@@ -11,5 +11,6 @@ class Gist(models.Model):
 	def __unicode__(self):
 		return self.text
 	def is_recent(self):
-		return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+	  now = timezone.now() 
+	  return (now - datetime.timedelta(days=1)) <= self.pub_date < now
 	is_recent.short_description = "Is recent?"

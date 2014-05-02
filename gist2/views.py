@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from gist2.models import Gist
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your views here.
 
@@ -13,7 +14,9 @@ class IndexView(generic.ListView):
   context_object_name = "latest_gists"
 
   def get_queryset(self):
-    return Gist.objects.order_by('-pub_date')[:5]
+    return Gist.objects.filter(
+      pub_date__lte=timezone.now()
+      ).order_by('-pub_date')[:5]
 	
 
 class DetailGistView(generic.DetailView):
