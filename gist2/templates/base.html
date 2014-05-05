@@ -11,6 +11,11 @@
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
 	<a class="navbar-brand" href="/">gist 2.0</a>
+	{% if signed_in %}
+	  <a class="navbar-brand" href="logout">Logout</a>
+	{% else %}
+	  <a class="navbar-brand" href="login">Login</a>
+	{% endif %}
       </div>
     </div>
     {% block content %} {% endblock %}
@@ -25,6 +30,7 @@
     <script src="{% static 'gist2/js/jquery-2.1.1.min.js' %}"></script>
     <script src="{% static 'gist2/js/bootstrap.js' %}"></script>
     <script src="{% static 'gist2/js/codemirror.js' %}"> </script>
+    <script src="{% static 'gist2/js/jquery.validate.min.js' %}"> </script>
   {% block userscript %} {% endblock %}
   </body>
 </html>

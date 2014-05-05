@@ -1,6 +1,11 @@
 body {
   padding-top:70px;
 }
+form p.error{
+  color:red;
+  text-align:center;
+  font-size:150%;
+}
 form.gist-edit{
   margin:0 auto;
   max-width:600px;

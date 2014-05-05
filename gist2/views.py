@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden,  Http404 
 from django.template import RequestContext, loader
 from django.core.urlresolvers import reverse
 from django.views import generic
@@ -19,13 +19,25 @@ class IndexView(generic.ListView):
       ).order_by('-pub_date')[:5]
 	
 
-class DetailGistView(generic.DetailView):
-  model = Gist
-  template_name = "gists/details.html"
+def detail_gist(request, gist_id):
+  g = Gist.objects.get(pk=gist_id)
+  params = {'gist':g}
+  if not request.user.is_authenticated():
+    return HttpResponseForbidden() 
+  else:
+    params['signed_in'] = True
+  if 'error_message' in request.session:
+    params['error_message'] = request.session['error_message']
+    del request.session['error_message']
+  return render(request, "gists/details.html", params)
 
 def edit_gist(request, gist_id):
   g = get_object_or_404(Gist, pk=gist_id)
   text = request.POST['text']
+  if not text:
+    url = reverse('detail_gist',args=(gist_id)) 
+    request.session["error_message"] = "Shit"
+    return HttpResponseRedirect(url)
   g.text = text
   g.save()
   return HttpResponseRedirect(reverse('index'))
