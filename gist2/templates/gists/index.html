@@ -4,7 +4,7 @@
   {% if latest_gists %}
     <ul class="gists-unordered">
     {% for gist in latest_gists %}
-    <li><a href="{% url 'detail_gist' gist.id %}"><div class="well">{{ gist.text|linebreaks }}</div></a> </li>
+    <li><a href="{% url 'detail_gist' gist.id %}"><div class="well">{{ gist.text|linebreaks|truncatewords:20 }}</div></a> </li>
     {% endfor %}
     </ul>
   {% else %}
