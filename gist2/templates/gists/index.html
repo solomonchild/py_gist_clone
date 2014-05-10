@@ -2,9 +2,9 @@
 {% block title %} gist2.0 {% endblock %}
 {% block content %}
   {% if latest_gists %}
-    <ul>
+    <ul class="gists-unordered">
     {% for gist in latest_gists %}
-    <li><a href="{% url 'detail_gist' gist.id %}">{{ gist.text }} </a> </li>
+    <li><a href="{% url 'detail_gist' gist.id %}"><div class="well">{{ gist.text|linebreaks }}</div></a> </li>
     {% endfor %}
     </ul>
   {% else %}

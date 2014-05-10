@@ -2,10 +2,10 @@
 {% block title %} Details for gist {{ gist.id }} {% endblock %}
 {% block content %}
 
-  <form id="submitform"  class="form-signin gist-edit" action="{% url 'edit_gist' gist.id %}" method="post">
+  <form id="submitform"  class="form-signin gist-edit" action="{% url 'edit_gist' gist.id %}" method="post" >
     {% if error_message %}<p class="error"><strong>Error: {{ error_message }} </strong></p>{% endif %}
     {% csrf_token %}
-    <input class="form-control" rows="20" type="textarea" name="text" value="{{ gist.text }}" />
+    <textarea class="form-control" wrap="hard" rows="15" name="text" >{{ gist.text }}</textarea>
     <br>
     <input type="submit" value="Save"/>
   </form>
@@ -13,13 +13,12 @@
 
   <script>
       window.onload = function(){
-	var textarea = $('input[name=text]')[0];
-
-	var codeMirror = CodeMirror.fromTextArea(textarea, {
-	  lineNumbers:true,
-	  mode:"javascript",
-	  smartIndent:true,
-	});
+        var textarea = $('textarea')[0];
+        var codeMirror = CodeMirror.fromTextArea(textarea, {
+          lineNumbers:true,
+          mode:"javascript",
+          smartIndent:true,
+        });
       };
   </script>
 

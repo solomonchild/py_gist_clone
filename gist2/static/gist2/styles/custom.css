@@ -9,6 +9,7 @@ form p.error{
 form.gist-edit{
   margin:0 auto;
   max-width:600px;
+  white-space:pre-wrap;
 }
 form.gist-edit input[type="submit"] {
   float:right;
@@ -16,4 +17,11 @@ form.gist-edit input[type="submit"] {
 input[type="textarea"] {
   height:300px;
   width:600px;
+}
+ul.gists-unordered {
+  list-style-type:none;
+}
+
+ul.gists-unordered a:hover{
+  text-decoration:none;
 }
