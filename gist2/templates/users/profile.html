@@ -1,9 +1,0 @@
-{% if latest_gists %}
-	<ul>
-	{% for gist in latest_gists %}
-	<li><a href="{% url 'detail_gist' gist.id %}">{{ gist.text }} </a> </li>
-	{% endfor %}
-	</ul>
-{% else %}
-<p> There are no polls available </p>
-{% endif %}

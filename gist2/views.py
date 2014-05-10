@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from gist2.models import Gist
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
 # Create your views here.
@@ -19,6 +20,7 @@ class IndexView(generic.ListView):
       ).order_by('-pub_date')[:5]
 	
 
+@login_required
 def detail_gist(request, gist_id):
   g = Gist.objects.get(pk=gist_id)
   params = {'gist':g}

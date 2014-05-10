@@ -10,8 +10,6 @@
     <input type="submit" value="Save"/>
   </form>
   {% block userscript %}  
-
-  <script>
       window.onload = function(){
         var textarea = $('textarea')[0];
         var codeMirror = CodeMirror.fromTextArea(textarea, {
@@ -20,7 +18,5 @@
           smartIndent:true,
         });
       };
-  </script>
-
   {% endblock %}
 {% endblock %}

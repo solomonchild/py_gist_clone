@@ -6,7 +6,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'gist2/styles/custom.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'gist2/styles/codemirror.css'%}"/> 
   </head>
-
   <body role="document">
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
@@ -14,14 +13,17 @@
         {% if signed_in %}
           <a class="navbar-brand" href="logout">Logout</a>
         {% else %}
-          <form class="navbar-form navbar-right" role="form">
+          <form class="navbar-form navbar-right" method="post" action="{% url 'django.contrib.auth.views.login' %}" role="form">
+          <input hidden name="next" value="{{request.path}}"/>
+            {% csrf_token %}
             <div class="form-group">
-              <input class="form-control" type="text" placeholder="Email" />
+              <input class="form-control" name="username" type="text" placeholder="Username" />
             </div>
             <div class="form-group">
-              <input class="form-control" type="password" placeholder="Password" />
+              <input class="form-control" type="password" name="password" placeholder="Password" />
             </div>
             <button type="submit" class="btn btn-success">Sign In</button>
+          <a type="submit" class="btn btn-success">Register</a>
           </form>
         {% endif %}
       </div>
@@ -39,6 +41,8 @@
     <script src="{% static 'gist2/js/bootstrap.js' %}"></script>
     <script src="{% static 'gist2/js/codemirror.js' %}"> </script>
     <script src="{% static 'gist2/js/jquery.validate.min.js' %}"> </script>
+  <script>
   {% block userscript %} {% endblock %}
+  </script>
   </body>
 </html>
