@@ -85,3 +85,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_URL = '/static/'
 TEMPLATE_DIRS = [os.path.join(BASE_DIR,'templates')]
+TEMPLATE_CONTEXT_PROCESSORS = (
+  'utils.context_proc.is_authenticated',
+  'django.contrib.auth.context_processors.auth',
+  'django.core.context_processors.request',
+)
+LOGIN_URL = "/login"
