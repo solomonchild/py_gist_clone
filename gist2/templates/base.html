@@ -11,7 +11,7 @@
       <div class="container">
         <a class="navbar-brand" href="/">gist 2.0</a>
         {% if signed_in %}
-          <a class="navbar-brand" href="logout">Logout</a>
+          <a class="navbar-brand" href="/logout">Logout</a>
         {% else %}
           <form class="navbar-form navbar-right" method="post" action="{% url 'django.contrib.auth.views.login' %}" role="form">
           <input hidden name="next" value="{{request.path}}"/>
@@ -41,8 +41,6 @@
     <script src="{% static 'gist2/js/bootstrap.js' %}"></script>
     <script src="{% static 'gist2/js/codemirror.js' %}"> </script>
     <script src="{% static 'gist2/js/jquery.validate.min.js' %}"> </script>
-  <script>
   {% block userscript %} {% endblock %}
-  </script>
   </body>
 </html>

@@ -9,6 +9,6 @@ urlpatterns = patterns('',
 	url(r'^users/(?P<pk>\d+)/gists/$', views.UserGists.as_view(), name='user_gists'),
 	url(r'^gists/(?P<gist_id>\d+)/edit$', views.edit_gist, name='edit_gist'),
 	url(r'^login$', login, {'template_name':'users/login.html'}),
-	url(r'^logout$', logout, {'next_page':'/'}),
+	url(r'^logout$', logout, {'next_page':'/'} ),
 )
 

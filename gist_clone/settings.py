@@ -87,3 +87,4 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'django.core.context_processors.request',
 )
 LOGIN_URL = "/login"
+LOGIN_REDIRECT_URL = "/"

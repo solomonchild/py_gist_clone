@@ -3,6 +3,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*.pyc
 
 # C extensions
 *.so
@@ -52,5 +53,6 @@ coverage.xml
 *.pot
 
 *.swp
+*.swo
 # Sphinx documentation
 docs/_build/
