@@ -4,9 +4,26 @@
   {% if latest_gists %}
     <ul class="gists-unordered">
     {% for gist in latest_gists %}
-    <li><a href="{% url 'detail_gist' gist.id %}"><div class="well">{{ gist.text|linebreaks|truncatewords:20 }}</div></a> </li>
+    <li>
+      <a href="{% url 'detail_gist' gist.id %}"><div class="well">{{ gist.text|linebreaks|truncatewords:20 }}</div></a>
+      <span disabled class="gray small pull-right"> {{ gist.pub_date | date:'Y-M-d' }} </span>
+      <br>
+      <button type="button" class="btn btn-xs btn-default">Remove</button>
+    </li>
     {% endfor %}
     </ul>
+    <div class="prevnext-block">
+      {% if latest_gists.has_previous %}
+	<a class="btn btn-lg btn-info" href="{{ latest_gists.previous_page_number }}">back</a>
+      {% else %}
+	<a disabled class="btn btn-lg btn-info" href="">back</a>
+      {% endif %}
+      {% if latest_gists.has_next %}
+	<a class="btn btn-lg btn-info" href="{{ latest_gists.next_page_number }}">next</a>
+      {% else %}
+	<a disabled class="btn btn-lg btn-info" href="">next</a>
+      {% endif %}
+    </div>
   {% else %}
     <p> There are no gists available </p>
   {% endif %}

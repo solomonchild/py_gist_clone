@@ -20,6 +20,7 @@ input[type="textarea"] {
 }
 ul.gists-unordered {
   list-style-type:none;
+  margin:auto 20%;
 }
 
 ul.gists-unordered a:hover{
@@ -32,4 +33,27 @@ ul.errors {
 div.login-container{
   width:40%;
   margin:0 auto;
+}
+a.username {
+  color:#4183c4 !important;
+}
+a.username:hover {
+  color:white !important;
+}
+
+footer {
+  position:absolute;
+  bottom:0;
+  width:1170px; 
+  height:100px;
+}
+.prevnext-block {
+  position:absolute;
+  bottom:100px;
+  width:1170px; 
+  text-align:center;
+  margin:auto 20%; 
+}
+span.gray {
+  color:gray;
 }

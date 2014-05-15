@@ -7,17 +7,18 @@ from gist2.models import Gist
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.core.paginator import Paginator
 
 # Create your views here.
 
-class IndexView(generic.ListView):
+def index(request, page):
   template_name = "gists/index.html" 
   context_object_name = "latest_gists"
-
-  def get_queryset(self):
-    return Gist.objects.filter(
-      pub_date__lte=timezone.now()
-      ).order_by('-pub_date')[:5]
+  gist_list = Gist.objects.all().order_by('-pub_date')
+  paginator = Paginator(gist_list, 1)
+  gists = paginator.page(page)
+  params = {'latest_gists' : gists}
+  return render(request, "gists/index.html", params)
 	
 
 @login_required
@@ -33,6 +34,7 @@ def detail_gist(request, gist_id):
     del request.session['error_message']
   return render(request, "gists/details.html", params)
 
+@login_required
 def edit_gist(request, gist_id):
   g = get_object_or_404(Gist, pk=gist_id)
   text = request.POST['text']
