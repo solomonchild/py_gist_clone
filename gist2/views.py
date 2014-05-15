@@ -7,7 +7,7 @@ from gist2.models import Gist
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 
@@ -16,7 +16,12 @@ def index(request, page):
   context_object_name = "latest_gists"
   gist_list = Gist.objects.all().order_by('-pub_date')
   paginator = Paginator(gist_list, 1)
-  gists = paginator.page(page)
+  try:
+    gists = paginator.page(page)
+  except PageNotAnInteger:
+    gists = paginator.page(1)
+  except EmptyPage:
+    gists = paginator.page(paginator.num_pages)
   params = {'latest_gists' : gists}
   return render(request, "gists/index.html", params)
 	
