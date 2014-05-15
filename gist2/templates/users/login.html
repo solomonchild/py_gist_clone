@@ -8,14 +8,23 @@
   </head>
 
 <body role="document">
-  <form action="" class="form-signin" method="post">
-      {% csrf_token %}
-      <input type="text" class="form-control" placeholder="Username" name="username" value="" id="username">
-      <input type="password"class="form-control" placeholder="Password"  name="password" value="" id="password">
+  <div class="login-container">
+    <ul class="errors">
+    {% if form.errors %}
+      {% for key,err in form.errors.items %}
+     {{ err }}
+      {% endfor %}
+    {% endif %}
+    </ul>
+    <form action="" class="form-signin login-form" method="post">
+	{% csrf_token %}
+	<input type="text" autofocus class="form-control" placeholder="Username" name="username" value="" id="username">
+	<input type="password"class="form-control" placeholder="Password"  name="password" value="" id="password">
 
-      <input class="btn btn-lg btn-primary btn-block" type="submit" value="login" />
-      <input hidden name="next" value="/" />
-  </form>
+	<input class="btn btn-lg btn-primary btn-block" type="submit" value="login" />
+	<input hidden name="next" value="/" />
+    </form>
+  </div>
   <div class="container">
     <hr>
     <footer class="footer pull-right">

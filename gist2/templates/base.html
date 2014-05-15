@@ -17,7 +17,7 @@
           <input hidden name="next" value="{{request.path}}"/>
             {% csrf_token %}
             <div class="form-group">
-              <input class="form-control" name="username" type="text" placeholder="Username" />
+              <input class="form-control" autofocus name="username" type="text" placeholder="Username" />
             </div>
             <div class="form-group">
               <input class="form-control" type="password" name="password" placeholder="Password" />

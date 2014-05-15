@@ -25,3 +25,11 @@ ul.gists-unordered {
 ul.gists-unordered a:hover{
   text-decoration:none;
 }
+ul.errors {
+  color:red;
+  font-weight:bold;
+}
+div.login-container{
+  width:40%;
+  margin:0 auto;
+}
