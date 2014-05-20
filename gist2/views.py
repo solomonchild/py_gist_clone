@@ -21,8 +21,10 @@ def index(request, page):
   except PageNotAnInteger:
     gists = paginator.page(1)
   except EmptyPage:
-    gists = paginator.page(paginator.num_pages)
+    gists = paginator.page(1)
   params = {'latest_gists' : gists}
+  request.session["page"] = page
+  print request.session["page"]
   return render(request, "gists/index.html", params)
 	
 
@@ -43,13 +45,17 @@ def detail_gist(request, gist_id):
 def edit_gist(request, gist_id):
   g = get_object_or_404(Gist, pk=gist_id)
   text = request.POST['text']
+  print request.path
   if not text:
     url = reverse('detail_gist',args=(gist_id)) 
     request.session["error_message"] = "Shit"
     return HttpResponseRedirect(url)
   g.text = text
   g.save()
-  return HttpResponseRedirect(reverse('index'))
+  p = 1;
+  if "page" in request.session:
+   p = request.session["page"] 
+  return HttpResponseRedirect(reverse('index', kwargs={'page' : p}))
 
 class DetailUserView(generic.DetailView):
   model = User
