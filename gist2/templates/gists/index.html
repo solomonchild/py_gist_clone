@@ -7,8 +7,12 @@
     <li>
       <a href="{% url 'detail_gist' gist.id %}"><div class="well">{{ gist.text|linebreaks|truncatewords:20 }}</div></a>
       <span disabled class="gray small pull-right"> {{ gist.pub_date | date:'Y-M-d' }} </span>
+      <span disabled class="gray small pull-left"> by <a href="{% url 'detail_user' pk=gist.user.id %}">{{ gist.user }}</a> </span>
       <br>
+      <br>
+      {% if request.user.is_superuser or gist.user.id == request.user.id %}
       <button type="button" class="btn btn-xs btn-default">Remove</button>
+      {% endif %}
     </li>
     {% endfor %}
     </ul>
