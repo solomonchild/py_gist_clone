@@ -12,8 +12,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 def index(request, page):
-  template_name = "gists/index.html" 
-  context_object_name = "latest_gists"
   gist_list = Gist.objects.all().order_by('-pub_date')
   paginator = Paginator(gist_list, 1)
   try:
@@ -24,7 +22,7 @@ def index(request, page):
     gists = paginator.page(1)
   params = {'latest_gists' : gists}
   request.session["page"] = page
-  print request.session["page"]
+  request.session["gobackto"] = request.path 
   return render(request, "gists/index.html", params)
 	
 
@@ -55,12 +53,33 @@ def edit_gist(request, gist_id):
   p = 1;
   if "page" in request.session:
    p = request.session["page"] 
-  return HttpResponseRedirect(reverse('index', kwargs={'page' : p}))
+  if "gobackto" in request.session:
+    temp = request.session["gobackto"]
+    del request.session["gobackto"]
+    return HttpResponseRedirect(temp)
+  else:
+    return HttpResponseRedirect(reverse('index', kwargs={'page' : p}))
 
-class DetailUserView(generic.DetailView):
-  model = User
-  template_name = "users/details.html"
 
+@login_required
+def detail_user(request, user_id, page=1):
+  u = get_object_or_404(User, pk=user_id)
+  gists = Gist.objects.filter(user=user_id)
+  params = {'latest_gists' : gists}
+  paginator = Paginator(gists, 1)
+  try:
+    gists = paginator.page(page)
+  except PageNotAnInteger:
+    gists = paginator.page(1)
+  except EmptyPage:
+    gists = paginator.page(1)
+  request.session["page"] = page
+  params = {'user' :u, 'gists':gists}
+  request.session["gobackto"] = request.path 
+  return render(request, "users/details.html", params)
+  
+
+@login_required
 class UserGists(generic.ListView):
   template_name = "users/users_gists.html" 
   context_object_name = "user_gists"

@@ -20,7 +20,15 @@ input[type="textarea"] {
 }
 ul.gists-unordered {
   list-style-type:none;
+}
+ul.thin {
   margin:auto 20%;
+}
+ul.gists-unordered {
+  list-style-type:none;
+}
+.jumbotron ul {
+  list-style-type:none;
 }
 
 ul.gists-unordered a:hover{
@@ -48,9 +56,7 @@ footer {
   height:100px;
 }
 .prevnext-block {
-  position:absolute;
   bottom:100px;
-  width:1170px; 
   text-align:center;
   margin:auto 20%; 
 }

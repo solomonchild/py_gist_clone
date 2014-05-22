@@ -1,2 +1,46 @@
+{% extends "base.html" %}
+{% block title %} gist2.0 {% endblock %}
+{% block content %}
 {% if error_message %}<p><strong>{{ error_message }} </strong></p>{% endif %}
-<h1> Viewing  {{ user.username }}'s profile </h1>
+<div class="container">
+  {% if user.id == request.user.id %}
+    <h1> My profile </h1>
+  {% else %}
+    <h1> {{ user.username }}'s profile </h1>
+  {% endif %}
+  <div class="jumbotron">
+    <ul>
+      <li> <b>Name</b>: {{ user.first_name }} {{ user.last_name }}</li>
+      <li> <b>E-mail</b>: {{ user.email }} </li>
+      <li> <b>Member since</b>: {{ user.date_joined| date:'d M Y'}} </li>
+    </ul>
+  </div>
+  {% if gists %}
+    <ul class="gists-unordered">
+      {% for gist in gists %}
+      <li>
+	<a href="{% url 'detail_gist' gist.id %}"><div class="well">{{ gist.text|linebreaks|truncatewords:20 }}</div></a>
+	<span disabled class="gray small pull-right"> {{ gist.pub_date | date:'Y-M-d' }} </span>
+	{% if request.user.is_superuser or gist.user.id == request.user.id %}
+	<button type="button" class="btn btn-xs btn-default">Remove</button>
+	{% endif %}
+      </li>
+      <br>
+      {% endfor %}
+    </ul>
+    {% endif %}
+      <div class="prevnext-block">
+	{% if gists.has_previous %}
+	  <a class="btn btn-lg btn-info" href="{% url 'detail_user' user_id=user.id page=gists.previous_page_number %}">back</a>
+	{% else %}
+	  <a disabled class="btn btn-lg btn-info" href="">back</a>
+	{% endif %}
+	{% if gists.has_next %}
+	<a class="btn btn-lg btn-info" href="{% url 'detail_user' user_id=user.id page=gists.next_page_number %}">next</a>
+	{% else %}
+	  <a disabled class="btn btn-lg btn-info" href="">next</a>
+	{% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
