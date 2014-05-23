@@ -42,6 +42,18 @@ def detail_gist(request, gist_id):
 
 @login_required
 @require_POST
+def remove_user(request, user_id):
+  u = get_object_or_404(User, pk=user_id)
+  u.delete()
+  if "gobackto" in request.session:
+    temp = request.session["gobackto"]
+    del request.session["gobackto"]
+    return HttpResponseRedirect(temp)
+  else:
+    return HttpResponseRedirect(reverse('index', kwargs={'page' : p}))
+
+@login_required
+@require_POST
 def remove_gist(request, gist_id):
   g = get_object_or_404(Gist, pk=gist_id)
   g.delete()
@@ -67,12 +79,7 @@ def edit_gist(request, gist_id):
   p = 1;
   if "page" in request.session:
    p = request.session["page"] 
-  if "gobackto" in request.session:
-    temp = request.session["gobackto"]
-    del request.session["gobackto"]
-    return HttpResponseRedirect(temp)
-  else:
-    return HttpResponseRedirect(reverse('index', kwargs={'page' : p}))
+  return HttpResponseRedirect(reverse('index', kwargs={'page' : p}))
 
 
 @login_required

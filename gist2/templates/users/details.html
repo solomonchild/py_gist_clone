@@ -13,6 +13,12 @@
       <li> <b>Name</b>: {{ user.first_name }} {{ user.last_name }}</li>
       <li> <b>E-mail</b>: {{ user.email }} </li>
       <li> <b>Member since</b>: {{ user.date_joined| date:'d M Y'}} </li>
+      {% if request.user.is_superuser and user.id != request.user.id%}
+	<form name="remove_user" method="post" action="{% url 'remove_user' user_id=user.id %}">
+	  {% csrf_token %}
+	  <input type="submit"class=" btn btn-xs btn-default" value="Remove"/>
+	</form>
+      {% endif %}
     </ul>
   </div>
   {% if gists %}
@@ -22,7 +28,7 @@
 	<a href="{% url 'detail_gist' gist.id %}"><div class="well">{{ gist.text|linebreaks|truncatewords:20 }}</div></a>
 	<span disabled class="gray small pull-right"> {{ gist.pub_date | date:'Y-M-d' }} </span>
 	{% if request.user.is_superuser or gist.user.id == request.user.id %}
-	  <form name="remove" method="post" action="{% url 'remove_gist' gist_id=gist.id %}">
+	  <form name="remove_gist" method="post" action="{% url 'remove_gist' gist_id=gist.id %}">
 	    {% csrf_token %}
 	    <input type="submit"class=" btn btn-xs btn-default" value="Remove"/>
 	  </form>
@@ -48,13 +54,15 @@
 </div>
 {% endblock %}
 {% block userscript %}  
-  <script>
+<script>
+      function submitHandler(e) {
+	e.preventDefault();
+	if(confirm("Are you sure?"))
+	  this.submit();
+      }
       window.onload = function(){
-        var form = $('form[name="remove"]');
-	form.on('submit', function(e) {
-	  e.preventDefault();
-	  if(confirm("Are you sure?"))
-	    this.submit();
+	$('form').each(function(i) {
+	  $(this).on('submit', submitHandler);
 	});
       };
   </script>
