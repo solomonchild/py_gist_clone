@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block title %} gist2.0 {% endblock %}
 {% block content %}
+  {% if success %}
+    <h2 class="success_story"> Registration complete, now login </h2>
+  {% endif %}
   {% if latest_gists %}
     <ul class="gists-unordered thin">
     {% for gist in latest_gists %}

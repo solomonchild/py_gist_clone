@@ -9,10 +9,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.http import require_POST
+from django.db import IntegrityError
 
 # Create your views here.
 
-def index(request, page):
+def index(request, page=1):
   gist_list = Gist.objects.all().order_by('-pub_date')
   paginator = Paginator(gist_list, 1)
   try:
@@ -24,8 +25,40 @@ def index(request, page):
   params = {'latest_gists' : gists}
   request.session["page"] = page
   request.session["gobackto"] = request.path 
+  if 'success' in request.session:
+    del request.session['success']
+    params['success'] = 'true'
   return render(request, "gists/index.html", params)
-	
+
+def register(request):
+  if request.method == "POST":
+    print request.POST	
+    errors=[]
+    params={}
+    if "username" not in request.POST or request.POST["username"] == "":
+      errors.append('Username field is required')
+    if "password1" not in request.POST or request.POST["password1"] == "":
+      errors.append('Password is required')
+    if "password2" not in request.POST or request.POST["password2"] == "":
+      errors.append('Please confirm password')
+    if "email" not in request.POST or request.POST["email"] == "":
+      errors.append('Email field is required')
+    if "password2" in request.POST and "password1" in request.POST and request.POST["password1"] != request.POST["password2"]:
+      errors.append('Passwords do not match')
+    params['errors']=errors
+    if len(errors) != 0:
+      return render(request, "registration/register.html", params)
+    u = User(username=request.POST["username"], password=request.POST["password1"], email=request.POST["email"])
+    try:
+      u.save()
+    except IntegrityError:
+      errors.append("User with such username already exists")
+      params['errors'] = errors
+      return render(request, "registration/register.html", params)
+    request.session['success'] = 'true'
+    return HttpResponseRedirect(reverse('index'))
+  else:
+    return render(request, "registration/register.html")
 
 @login_required
 def detail_gist(request, gist_id):

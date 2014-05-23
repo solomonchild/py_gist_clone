@@ -1,0 +1,45 @@
+{% load staticfiles %}
+<html>
+  <head>
+    <title> {% block title %} {% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'gist2/styles/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'gist2/styles/custom.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'gist2/styles/codemirror.css'%}"/> 
+  </head>
+
+<body role="document">
+  <div class="login-container">
+    <ul class="errors">
+    {% if errors %}
+      {% for err in errors %}
+      <li>
+      {{err}}
+      </li>
+      {% endfor %}
+    {% endif %}
+    </ul>
+    <form action="" class="form-signin login-form" method="post">
+	{% csrf_token %}
+	<input type="text" autofocus class="form-control" placeholder="Username" name="username" value="" id="username">
+	<input type="password" class="form-control" placeholder="Password"  name="password1" value="" id="password">
+	<input type="password" class="form-control" placeholder="Repeat password"  name="password2" value="" id="password2">
+	<input type="text" class="form-control" placeholder="E-mail"  name="email" value="" id="email">
+
+	<input class="btn btn-lg btn-primary btn-block" type="submit" value="login" />
+	<input hidden name="next" value="{{ request.REQUEST.next }}" />
+    </form>
+  </div>
+  <div class="container">
+    <hr>
+    <footer class="footer pull-right">
+<p> gist 2.0 2014 </p>
+    </footer>
+  </div>
+
+
+  <script src="{% static 'gist2/js/jquery-2.1.1.min.js' %}"></script>
+  <script src="{% static 'gist2/js/bootstrap.js' %}"></script>
+  <script src="{% static 'gist2/js/codemirror.js' %}"> </script>
+  <script src="{% static 'gist2/js/jquery.validate.min.js' %}"> </script>
+</body>
+</html>
