@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 
@@ -40,6 +41,19 @@ def detail_gist(request, gist_id):
   return render(request, "gists/details.html", params)
 
 @login_required
+@require_POST
+def remove_gist(request, gist_id):
+  g = get_object_or_404(Gist, pk=gist_id)
+  g.delete()
+  if "gobackto" in request.session:
+    temp = request.session["gobackto"]
+    del request.session["gobackto"]
+    return HttpResponseRedirect(temp)
+  else:
+    return HttpResponseRedirect(reverse('index', kwargs={'page' : p}))
+
+@login_required
+@require_POST
 def edit_gist(request, gist_id):
   g = get_object_or_404(Gist, pk=gist_id)
   text = request.POST['text']

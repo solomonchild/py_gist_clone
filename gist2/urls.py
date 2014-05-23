@@ -8,6 +8,7 @@ urlpatterns = patterns('',
 	url(r'^users/(?P<user_id>\d+)/$', views.detail_user, name='detail_user'),
 	url(r'^users/(?P<user_id>\d+)/(?P<page>\d+)/$', views.detail_user, name='detail_user'),
 	url(r'^gists/(?P<gist_id>\d+)/edit$', views.edit_gist, name='edit_gist'),
+	url(r'^gists/(?P<gist_id>\d+)/remove$', views.remove_gist, name='remove_gist'),
 	url(r'^login$', login, {'template_name':'users/login.html'}),
 	url(r'^logout$', logout, {'next_page':'/'} ),
 )

@@ -22,7 +22,10 @@
 	<a href="{% url 'detail_gist' gist.id %}"><div class="well">{{ gist.text|linebreaks|truncatewords:20 }}</div></a>
 	<span disabled class="gray small pull-right"> {{ gist.pub_date | date:'Y-M-d' }} </span>
 	{% if request.user.is_superuser or gist.user.id == request.user.id %}
-	<button type="button" class="btn btn-xs btn-default">Remove</button>
+	  <form name="remove" method="post" action="{% url 'remove_gist' gist_id=gist.id %}">
+	    {% csrf_token %}
+	    <input type="submit"class=" btn btn-xs btn-default" value="Remove"/>
+	  </form>
 	{% endif %}
       </li>
       <br>
@@ -43,4 +46,16 @@
     </div>
   </div>
 </div>
+{% endblock %}
+{% block userscript %}  
+  <script>
+      window.onload = function(){
+        var form = $('form[name="remove"]');
+	form.on('submit', function(e) {
+	  e.preventDefault();
+	  if(confirm("Are you sure?"))
+	    this.submit();
+	});
+      };
+  </script>
 {% endblock %}
