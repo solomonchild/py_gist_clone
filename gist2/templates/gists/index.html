@@ -12,8 +12,8 @@
       <br>
       {% if request.user.is_superuser or gist.user.id == request.user.id %}
       <form name="remove" method="post" action="{% url 'remove_gist' gist_id=gist.id %}">
-      {% csrf_token %}
-      <input type="submit"class=" btn btn-xs btn-default" value="Remove"/>
+	{% csrf_token %}
+	<input type="submit"class=" btn btn-xs btn-default" value="Remove"/>
       </form>
       {% endif %}
     </li>

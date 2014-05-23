@@ -12,7 +12,11 @@
     <ul class="errors">
     {% if form.errors %}
       {% for key,err in form.errors.items %}
-     {{ err }}
+	{% if key == "username" or key == "password" %}
+	{{key}} {{err}}
+	{%else %}
+	  {{ err }}
+	{% endif %}
       {% endfor %}
     {% endif %}
     </ul>
