@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.http import require_POST
 from django.db import IntegrityError
+from django.contrib.auth.hashers import make_password
 import datetime
 
 # Create your views here.
@@ -106,10 +107,12 @@ def update_user(request, user_id):
     u.first_name = request.POST['firstname']
   if "lastname" in request.POST:
     u.last_name = request.POST['lastname']
-  if (request.POST['password1'] != '' or request.POST['password2'] != '') and request.POST['password1'] != request.POST['password2']:
-    errors.append('Passwords should match')
-  else:
-    u.password = request.POST['password1']
+  if (request.POST['password1'] != '' or request.POST['password2'] != ''):
+    if request.POST['password1'] != request.POST['password2']:
+      errors.append('Passwords should match')
+    else:
+      u.password = make_password(request.POST['password1'])
+      print "PASSWORD: \"", request.POST['password1'],"\""
   if "email" not in request.POST or request.POST["email"] == "":
     errors.append('Email field is required')
   else:
