@@ -3,23 +3,44 @@
 {% block content %}
 {% if error_message %}<p><strong>{{ error_message }} </strong></p>{% endif %}
 <div class="container">
+  {% if success %}
+    <h2 class="success_story"> Info updated</h2>
+  {% endif %}
   {% if user.id == request.user.id %}
     <h1> My profile </h1>
   {% else %}
     <h1> {{ user.username }}'s profile </h1>
   {% endif %}
   <div class="jumbotron">
-    <ul>
-      <li> <b>Name</b>: {{ user.first_name }} {{ user.last_name }}</li>
-      <li> <b>E-mail</b>: {{ user.email }} </li>
-      <li> <b>Member since</b>: {{ user.date_joined| date:'d M Y'}} </li>
+    {% if errors %}
+    <ul class="errors">
+      {% for err in errors %}
+      <li>{{err}}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% if request.user.is_superuser or user.id == request.user.id%}
+    <form action="{% url 'update_user' user_id=user.id %}" class="form-signin update-form" method="post">
+	  {% csrf_token %}
+	  <label for="firstname"> First name </label>
+	  <input type="text" autofocus class="form-control" placeholder="First name" name="firstname" value="{{user.first_name}}" id="username">
+	  <label for="lastname"> Last name </label>
+	  <input type="text" autofocus class="form-control" placeholder="Last name" name="lastname" value="{{user.last_name}}" id="username">
+	  <label for="email"> E-mail </label>
+	  <input type="text" class="form-control" placeholder="e-mail"  name="email" value="{{user.email}}" >
+	  <h3> Password </h3>
+	  <input type="password" class="form-control" placeholder="Password"  name="password1" value="" >
+	  <input type="password" class="form-control" placeholder="Confirm password"  name="password2" value="" >
+	  <br>
+	  <input class="btn btn-lg btn-primary btn-block" type="submit" value="update" />
+      </form>
+      {% endif %}
       {% if request.user.is_superuser and user.id != request.user.id%}
 	<form name="remove_user" method="post" action="{% url 'remove_user' user_id=user.id %}">
 	  {% csrf_token %}
 	  <input type="submit"class=" btn btn-xs btn-default" value="Remove"/>
 	</form>
       {% endif %}
-    </ul>
   </div>
   {% if gists %}
     <ul class="gists-unordered">
@@ -61,7 +82,10 @@
 	  this.submit();
       }
       window.onload = function(){
-	$('form').each(function(i) {
+	$('form[name="remove_user"]').each(function(i) {
+	  $(this).on('submit', submitHandler);
+	});
+	$('form[name="remove_gist"]').each(function(i) {
 	  $(this).on('submit', submitHandler);
 	});
       };

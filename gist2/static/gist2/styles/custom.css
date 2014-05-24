@@ -67,3 +67,6 @@ span.gray {
   text-align:center;
   color:green;
 }
+form.update-form {
+  margin-right:60%;
+}

@@ -32,7 +32,6 @@ def index(request, page=1):
 
 def register(request):
   if request.method == "POST":
-    print request.POST	
     errors=[]
     params={}
     if "username" not in request.POST or request.POST["username"] == "":
@@ -87,6 +86,36 @@ def remove_user(request, user_id):
 
 @login_required
 @require_POST
+def update_user(request, user_id):
+  errors = []
+  params = {}
+  u = get_object_or_404(User, pk=user_id)
+  if "fistname" in request.POST:
+    u.first_name = request.POST['firstname']
+  if "lastname" in request.POST:
+    u.last_name = request.POST['lastname']
+  if "password1" in request.POST and "password2" in request.POST and request.POST['password1'] != '' and request.POST['password1'] != request.POST['password2']:
+    errors.append('Passwords should match')
+  else:
+    u.password = request.POST['password1']
+  if "email" not in request.POST or request.POST["email"] == "":
+    errors.append('Email field is required')
+  else:
+    u.email = request.POST['email']
+  if len(errors) != 0:
+    request.session["errors"] = errors
+    return HttpResponseRedirect(reverse('detail_user', kwargs={'user_id':user_id}))
+  try:
+    u.save()
+  except IntegrityError:
+    errors.append("Problem with database")
+    params['errors'] = errors
+    return render(request, "users/details.html", params)
+  request.session["success"] = ''
+  return HttpResponseRedirect(reverse('detail_user', kwargs={'user_id':user_id}))
+
+@login_required
+@require_POST
 def remove_gist(request, gist_id):
   g = get_object_or_404(Gist, pk=gist_id)
   g.delete()
@@ -119,7 +148,6 @@ def edit_gist(request, gist_id):
 def detail_user(request, user_id, page=1):
   u = get_object_or_404(User, pk=user_id)
   gists = Gist.objects.filter(user=user_id)
-  params = {'latest_gists' : gists}
   paginator = Paginator(gists, 1)
   try:
     gists = paginator.page(page)
@@ -129,6 +157,9 @@ def detail_user(request, user_id, page=1):
     gists = paginator.page(1)
   request.session["page"] = page
   params = {'user' :u, 'gists':gists}
+  if 'errors' in  request.session:
+    params['errors'] = request.session['errors']
+    del request.session['errors']
   request.session["gobackto"] = request.path 
   return render(request, "users/details.html", params)
   
