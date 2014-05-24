@@ -49,7 +49,7 @@ def register(request):
     params['errors']=errors
     if len(errors) != 0:
       return render(request, "registration/register.html", params)
-    u = User(username=request.POST["username"], password=request.POST["password1"], email=request.POST["email"])
+    u = User(username=request.POST["username"], password=make_password(request.POST["password1"]), email=request.POST["email"])
     try:
       u.save()
     except IntegrityError:
