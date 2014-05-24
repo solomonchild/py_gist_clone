@@ -102,7 +102,7 @@ def update_user(request, user_id):
   errors = []
   params = {}
   u = get_object_or_404(User, pk=user_id)
-  if "fistname" in request.POST:
+  if "firstname" in request.POST:
     u.first_name = request.POST['firstname']
   if "lastname" in request.POST:
     u.last_name = request.POST['lastname']
