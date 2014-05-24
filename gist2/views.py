@@ -94,7 +94,7 @@ def update_user(request, user_id):
     u.first_name = request.POST['firstname']
   if "lastname" in request.POST:
     u.last_name = request.POST['lastname']
-  if "password1" in request.POST and "password2" in request.POST and request.POST['password1'] != '' and request.POST['password1'] != request.POST['password2']:
+  if (request.POST['password1'] != '' or request.POST['password2'] != '') and request.POST['password1'] != request.POST['password2']:
     errors.append('Passwords should match')
   else:
     u.password = request.POST['password1']
@@ -160,6 +160,9 @@ def detail_user(request, user_id, page=1):
   if 'errors' in  request.session:
     params['errors'] = request.session['errors']
     del request.session['errors']
+  if 'success' in  request.session:
+    params['success'] = 'true'
+    del request.session['success']
   request.session["gobackto"] = request.path 
   return render(request, "users/details.html", params)
   
