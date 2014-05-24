@@ -10,12 +10,13 @@ from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.http import require_POST
 from django.db import IntegrityError
+import datetime
 
 # Create your views here.
 
 def index(request, page=1):
   gist_list = Gist.objects.all().order_by('-pub_date')
-  paginator = Paginator(gist_list, 1)
+  paginator = Paginator(gist_list, 10)
   try:
     gists = paginator.page(page)
   except PageNotAnInteger:
@@ -85,6 +86,17 @@ def remove_user(request, user_id):
     return HttpResponseRedirect(reverse('index', kwargs={'page' : p}))
 
 @login_required
+def add_gist(request):
+  if request.method == "POST":
+    text = request.POST["text"]
+    g = Gist(text=text, user_id = request.user.id, pub_date = datetime.datetime.now())
+    g.save()
+    return HttpResponseRedirect(reverse('index'))
+  else:
+    return render(request, "gists/new.html")
+
+
+@login_required
 @require_POST
 def update_user(request, user_id):
   errors = []
@@ -148,7 +160,7 @@ def edit_gist(request, gist_id):
 def detail_user(request, user_id, page=1):
   u = get_object_or_404(User, pk=user_id)
   gists = Gist.objects.filter(user=user_id)
-  paginator = Paginator(gists, 1)
+  paginator = Paginator(gists, 5)
   try:
     gists = paginator.page(page)
   except PageNotAnInteger:

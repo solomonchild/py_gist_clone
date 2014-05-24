@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %} Add new gist {% endblock %}
+{% block content %}
+
+  <form id="submitform"  class="form-signin gist-edit" action="{% url 'add_gist' %}" method="post" >
+    {% if error_message %}<p class="error"><strong>Error: {{ error_message }} </strong></p>{% endif %}
+    {% csrf_token %}
+    <textarea class="form-control" wrap="hard" rows="15" name="text" ></textarea>
+    <br>
+    <input type="submit" value="Save"/>
+  </form>
+  {% block userscript %}  
+  <script>
+      window.onload = function(){
+        var textarea = $('textarea')[0];
+        var codeMirror = CodeMirror.fromTextArea(textarea, {
+          lineNumbers:true,
+          mode:"javascript",
+          smartIndent:true,
+        });
+      };
+  </script>
+  {% endblock %}
+{% endblock %}
+

@@ -13,6 +13,7 @@
         {% if signed_in %}
           <a class="navbar-brand navbar-right" href="/logout">Logout</a>
 	  <a class="navbar-brand navbar-right username" href="{% url 'detail_user' user_id=user.id  %}">{{ user.username}}</a>
+	  <a class="navbar-brand navbar-right" href="{% url 'add_gist' %}">New gist</a>
         {% else %}
           <form class="navbar-form navbar-right" method="post" action="{% url 'django.contrib.auth.views.login' %}" role="form">
           <input hidden name="next" value="{{request.path}}"/>
