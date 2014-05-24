@@ -8,6 +8,15 @@
   </head>
 
 <body role="document">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <a class="navbar-brand" href="/">gists</a>
+          <form class="navbar-form navbar-right" method="post" action="{% url 'django.contrib.auth.views.login' %}" role="form">
+          <input hidden name="next" value="{{request.path}}"/>
+	  {% csrf_token %}
+          </form>
+      </div>
+    </div>
   <div class="login-container">
     <ul class="errors">
     {% if errors %}
@@ -25,7 +34,7 @@
 	<input type="password" class="form-control" placeholder="Repeat password"  name="password2" value="" id="password2">
 	<input type="text" class="form-control" placeholder="E-mail"  name="email" value="" id="email">
 
-	<input class="btn btn-lg btn-primary btn-block" type="submit" value="login" />
+	<input class="btn btn-lg btn-primary btn-block" type="submit" value="sign up" />
 	<input hidden name="next" value="{{ request.REQUEST.next }}" />
     </form>
   </div>
