@@ -34,6 +34,11 @@
 	  <br>
 	  <input class="btn btn-lg btn-primary btn-block" type="submit" value="update" />
       </form>
+      {% else %}
+	<ul>
+	  <li> <b>Name</b>: {{ user.first_name }} {{ user.last_name }}</li>  
+	  <li> <b>E-mail</b>: {{ user.email }} </li>   
+	  <li> <b>Member since</b>: {{ user.date_joined| date:'d M Y'}} </li>  
       {% endif %}
       {% if request.user.is_superuser and user.id != request.user.id%}
 	<form name="remove_user" method="post" action="{% url 'remove_user' user_id=user.id %}">
