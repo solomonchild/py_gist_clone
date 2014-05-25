@@ -7,7 +7,9 @@
     {% csrf_token %}
     <textarea class="form-control" wrap="hard" rows="15" name="text" >{{ gist.text }}</textarea>
     <br>
-    <input type="submit" value="Save"/>
+    {% if gist.user_id == request.user.id or request.user.is_superuser %}
+      <input type="submit" value="Save"/>
+    {% endif %}
   </form>
   {% block userscript %}  
   <script>
@@ -17,6 +19,9 @@
           lineNumbers:true,
           mode:"javascript",
           smartIndent:true,
+    {% if gist.user_id == request.user.id or request.user.is_superuser %}
+	  readOnly = true,
+    {% endif %}
         });
       };
   </script>

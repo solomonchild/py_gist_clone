@@ -173,11 +173,15 @@ def remove_gist(request, gist_id):
 @require_POST
 def edit_gist(request, gist_id):
   g = get_object_or_404(Gist, pk=gist_id)
+  if g.user_id != request.user.id and not request.user.is_superuser:
+    url = reverse('detail_gist',args=(gist_id)) 
+    request.session["error_message"] = "You can't save it"
+    return HttpResponseRedirect(url)
   text = request.POST['text']
   print request.path
   if not text:
     url = reverse('detail_gist',args=(gist_id)) 
-    request.session["error_message"] = "Shit"
+    request.session["error_message"] = "Don't post empty gist please"
     return HttpResponseRedirect(url)
   g.text = text
   g.save()
