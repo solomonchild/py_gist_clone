@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     url(r'^', include('gist2.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
-if settings.DEBUG:
+if not settings.DEBUG:
   urlpatterns += patterns('',
        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/path/to/media'})
    )
