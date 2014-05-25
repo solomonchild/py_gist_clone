@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %} gist2.0 {% endblock %}
+{% block content %}
+  {% if users %}
+    <ul class="gists-unordered thin">
+    {% for user in users %}
+    <li>
+      <a href="{% url 'detail_user' user.id %}"><div class="well thin">{{ user.username }}</div></a>
+      {% if request.user.is_superuser or gist.user.id == request.user.id %}
+	<form name="remove" method="post" action="{% url 'remove_user' user_id=user.id %}">
+	  {% csrf_token %}
+	  <input type="submit"class=" btn btn-xs btn-default" value="Remove"/>
+	</form>
+      {% endif %}
+    </li>
+    {% endfor %}
+    </ul>
+    <div class="prevnext-block">
+      {% if users.has_previous %}
+	<a class="btn btn-lg btn-info" href="{{ users.previous_page_number }}">back</a>
+      {% else %}
+	<a disabled class="btn btn-lg btn-info" href="">back</a>
+      {% endif %}
+      {% if users.has_next %}
+	<a class="btn btn-lg btn-info" href="{{ users.next_page_number }}">next</a>
+      {% else %}
+	<a disabled class="btn btn-lg btn-info" href="">next</a>
+      {% endif %}
+    </div>
+  {% else %}
+    <p> No users found  </p>
+  {% endif %}
+{% endblock %}
+{% block userscript %}  
+  <script>
+      window.onload = function(){
+        var form = $('form[name="remove"]');
+	form.on('submit', function(e) {
+	  e.preventDefault();
+	  if(confirm("Are you sure?"))
+	    this.submit();
+	});
+      };
+  </script>
+{% endblock %}

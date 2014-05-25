@@ -14,6 +14,11 @@
           <a class="navbar-brand navbar-right" href="/logout">Logout</a>
 	  <a class="navbar-brand navbar-right username" href="{% url 'detail_user' user_id=user.id  %}">{{ user.username}}</a>
 	  <a class="navbar-brand navbar-right" href="{% url 'add_gist' %}">New gist</a>
+	  <form action="{% url 'search_user_p' %}" method="POST" class="navbar-form navbar-right">
+            {% csrf_token %}
+	    <input type="text" name="criteria" class="form-control" placeholder="Search users...">
+	</form>
+	<br>
         {% else %}
           <form class="navbar-form navbar-right" method="post" action="{% url 'django.contrib.auth.views.login' %}" role="form">
           <input hidden name="next" value="{{request.path}}"/>

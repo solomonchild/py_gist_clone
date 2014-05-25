@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.http import require_POST
-from django.db import IntegrityError
+from django.db import IntegrityError 
+from django.db.models import Q
 from django.contrib.auth.hashers import make_password
 import datetime
 
@@ -60,6 +61,33 @@ def register(request):
     return HttpResponseRedirect(reverse('index'))
   else:
     return render(request, "registration/register.html")
+
+@login_required
+def search_user(request, criteria='', page=1):
+  params={}
+  if request.method == "POST" and "criteria" in request.POST:
+    text = request.POST["criteria"]
+    return HttpResponseRedirect(reverse('search_user', kwargs={'criteria': text}))
+  else:
+    if criteria == "":
+      u = User.objects.all()
+    else:
+      try:
+	u = User.objects.filter(Q(username__contains=criteria) | Q(first_name__contains=criteria) | Q(last_name__contains=criteria) | Q(email__contains=criteria))
+      except User.DoesNotExist:
+	u = None
+    if u:
+      paginator = Paginator(u, 10)
+      try:
+	users = paginator.page(page)
+      except PageNotAnInteger:
+	users = paginator.page(1)
+      except EmptyPage:
+	gists = paginator.page(1)
+      request.session["page"] = page
+      params = {'users' : users}
+      request.session["gobackto"] = request.path 
+    return render(request, "users/search_results.html", params)
 
 @login_required
 def detail_gist(request, gist_id):

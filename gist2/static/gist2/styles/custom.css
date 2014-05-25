@@ -21,6 +21,9 @@ input[type="textarea"] {
 ul.gists-unordered {
   list-style-type:none;
 }
+div.thin {
+  width:20%;
+}
 ul.thin {
   margin:auto 20%;
 }
