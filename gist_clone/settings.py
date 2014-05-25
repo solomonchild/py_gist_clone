@@ -20,11 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'eu7k8=c36*qat89dtlrg40kipdxo0u%z*#i&2d))%0c@(ykjea'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False 
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -80,6 +80,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_URL = '/static/'
+STATIC_ROOT='static'
 TEMPLATE_DIRS = [os.path.join(BASE_DIR,'templates')]
 TEMPLATE_CONTEXT_PROCESSORS = (
   'utils.context_proc.is_authenticated',
